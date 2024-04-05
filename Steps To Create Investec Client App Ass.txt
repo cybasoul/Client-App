@@ -1,0 +1,84 @@
+
+PM> Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 6.0.0
+PM> Install-Package Microsoft.EntityFrameworkCore.Tools -Version 6.0.0
+PM> Install-Package Microsoft.EntityFrameworkCore
+
+Only after you add AppDbContext & Models - Product.cs
+PM> add-migration initial
+PM> update-database
+
+===========================================================================================================
+Folders
+========
+
+Dal - AppDbContext.cs = This is where you setup your DbContext
+added id checks: 
+// Add this method to check for duplicate ID Numbers
+        public bool IsIDNumberUnique(string idNumber)
+        {
+            return !Clients.Any(c => c.IDNumber == idNumber);
+        }
+===========================================================================================================
+Models - Product.cs = This is where you create your Table structure(DB) So add the correct Parameters -> 
+	public class Client
+{
+    [Key]
+    public int Id { get; set; }
+
+    [Required]
+    [DisplayName("First Name")]
+    public string FirstName { get; set; }
+
+    [Required]
+    [DisplayName("Last Name")]
+    public string LastName { get; set; }
+
+    [DisplayName("Mobile Number")]
+    public string MobileNumber { get; set; }
+
+    [Required]
+    [DisplayName("ID Number")]
+    public string IDNumber { get; set; }
+	
+	Custom ID Number Validation:
+	Validate the South African ID Number using the Luhn algorithm.
+	Ensure that the ID Number is unique (no duplicates).
+	Created new : class : IDValidationHelper for id checks
+	Create.cshtml.cs : added ccode for checks :
+	// Validate the ID Number
+            if (!IDValidationHelper.IsSouthAfricanIDValid(Client.IDNumber))
+            {
+                ModelState.AddModelError("Client.IDNumber", "Invalid or duplicate ID Number.");
+                return Page();
+            }
+
+    [DisplayName("Physical Address")]
+    public string PhysicalAddress { get; set; }
+	
+	
+
+===========================================================================================================
+updated for connection string
+	appsettings.json
+		  "ConnectionStrings": {
+		  "DefaultConnection": "Data Source=MARLING;Initial Catalog=Training;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"
+								}
+								}
+
+
+===========================================================================================================
+Added Dependency Injection Program.cs
+
+ // Add services to the container.
+ builder.Services.AddRazorPages();
+ //Dependency Injection
+ builder.Services.AddDbContext<AppDbContext>
+     (options =>
+     options.UseSqlServer
+     (builder.Configuration.GetConnectionString
+     ("DefaultConnection"))
+     ); 
+	
+=========================================================================================================== 
+	 Create Folder in Pages 
+	 ClientMaster - Right click and add new scaffold item
