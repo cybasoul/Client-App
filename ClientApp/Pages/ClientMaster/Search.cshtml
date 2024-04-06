@@ -1,13 +1,21 @@
 ﻿@page
 @model ClientApp.Pages.ClientMaster.SearchModel
 
-<!-- Rest of your HTML content -->
 <form method="post">
-    <input type="text" asp-for="SearchTerm" placeholder="Enter search term" />
-    <button type="submit">Search</button>
+
+    <div class="text-center">
+        <h1 class="display-4">Client Search</h1>
+        <div>
+            <a href="https://localhost:7047/clientmaster">Back to List</a> 
+            <hr/>
+            <input type="text" asp-for="SearchTerm" placeholder="Enter search term" />
+            <button type="submit">Search</button>
+        </div>
+    </div>
 </form>
 
 <!-- Display search results -->
+<div class="text-center">
 @if (Model.SearchResults != null && Model.SearchResults.Any())
 {
     <h3>Search Results:</h3>
@@ -22,3 +30,4 @@ else if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
 {
     <p>No matching clients found.</p>
 }
+</div>
