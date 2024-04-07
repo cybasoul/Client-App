@@ -1,6 +1,5 @@
 ﻿namespace ClientApp.Pages.ClientMaster
 {
-    // IDValidationHelper.cs (Create a new class or add this method to an existing class)
     public static class IDValidationHelper
     {
         // Validate South African ID Number using Luhn algorithm
@@ -14,7 +13,7 @@
             // Replace with your actual validation logic.
 
             // Placeholder return statement (modify as needed)
-            return true; // Change to false if validation fail
+            return true;
         }
     }
 
